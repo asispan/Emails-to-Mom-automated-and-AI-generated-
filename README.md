@@ -1,4 +1,4 @@
-# Cron Email to Mom
+# Cron Email to Mom (using GPT-4mini)
 
 **An intelligent n8n workflow that sends personalized daily news digests to your loved ones**
 
