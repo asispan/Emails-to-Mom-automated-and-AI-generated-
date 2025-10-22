@@ -1,25 +1,25 @@
-# ðŸ“§ Cron Email to Mom
+# Cron Email to Mom
 
 <div align="center">
 
-![n8n](https://img.shields.io/badge/n8n-Workflow-EA4B71?style=for-the-badge&logo=n8n&logoColor=white)
-![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991?style=for-the-badge&logo=openai&logoColor=white)
-![Gmail](https://img.shields.io/badge/Gmail-Integration-D14836?style=for-the-badge&logo=gmail&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
+[![n8n](https://img.shields.io/badge/n8n-Workflow-EA4B71?style=for-the-badge&logo=n8n&logoColor=white)](https://n8n.io)
+[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991?style=for-the-badge&logo=openai&logoColor=white)](https://openai.com)
+[![Gmail](https://img.shields.io/badge/Gmail-Integration-D14836?style=for-the-badge&logo=gmail&logoColor=white)](https://gmail.com)
+[![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)](https://github.com)
 
 **An intelligent n8n workflow that sends personalized daily news digests to your loved ones**
 
-[Features](#-features) â€¢ [Architecture](#-architecture) â€¢ [Installation](#-installation) â€¢ [Configuration](#-configuration) â€¢ [Usage](#-usage)
+[Features](#features) â€¢ [Architecture](#architecture) â€¢ [Installation](#installation) â€¢ [Configuration](#configuration) â€¢ [Usage](#usage)
 
 </div>
 
 ---
 
-## ðŸ“– Overview
+## Overview
 
 **Cron Email to Mom** is an automated n8n workflow designed to keep your family informed with curated news content. The workflow leverages AI-powered news aggregation to fetch, translate, and deliver personalized news updates via email at scheduled times throughout the day.
 
-### ðŸŽ¯ Use Case
+### Use Case
 
 Stay connected with family members by automatically sending them:
 - **Regional News**: Top 5 news stories from Odisha (in Odia language)
@@ -29,71 +29,37 @@ Stay connected with family members by automatically sending them:
 
 ---
 
-## âœ¨ Features
+## Features
 
-### ðŸ¤– AI-Powered Content Generation
+### AI-Powered Content Generation
 - Utilizes OpenAI GPT-4 for intelligent news curation
 - Structured output parsing for consistent formatting
 - Context-aware content summarization
 
-### ðŸŒ Multi-Language Support
+### Multi-Language Support
 - Automatic translation from English to Odia
 - Google Translate API integration
 - Preserves formatting across languages
 
-### â° Scheduled Execution
+### Scheduled Execution
 - **8:02 AM**: Odisha regional news (in Odia)
 - **12:01 PM**: Indian national news
 - **4:14 PM**: International news
 - **8:12 PM**: Fun facts and interesting knowledge
 
-### ðŸ“Š Comprehensive Logging
+### Comprehensive Logging
 - All sent emails logged to Google Sheets
 - Tracks date, time, subject, and content
 - Error handling and status monitoring
 
-### ðŸ“§ Professional Email Delivery
+### Professional Email Delivery
 - Gmail integration with OAuth2 authentication
 - HTML-formatted emails with rich content
 - Reply tracking enabled
 
 ---
 
-## ðŸ—ï¸ Architecture
-
-### Workflow Components
-
-```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚ Schedule Triggerâ”‚ (4 different times)
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-         â”‚
-         â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚   AI Agent      â”‚ (OpenAI GPT-4)
-â”‚  News Curation  â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-         â”‚
-         â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚  Translation    â”‚ (Google Translate - for Odia)
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-         â”‚
-         â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚ Text Processing â”‚ (Paragraph chunking)
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-         â”‚
-         â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚  Email Sending  â”‚ (Gmail)
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-         â”‚
-         â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚   Logging       â”‚ (Google Sheets)
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-```
+## Architecture
 
 ### Key Nodes
 
@@ -110,7 +76,7 @@ Stay connected with family members by automatically sending them:
 
 ---
 
-## ðŸš€ Installation
+## Installation
 
 ### Prerequisites
 
@@ -126,7 +92,7 @@ Stay connected with family members by automatically sending them:
 
 ```bash
 # Download the sanitized workflow JSON
-wget https://github.com/YOUR_USERNAME/cron-email-to-mom/raw/main/Cron-Email-to-Mom-Sanitized.json
+wget https://github.com/asispan/Emails-to-Mom-automated-and-AI-generated-/raw/main/Cron-Email-to-Mom-Sanitized.json
 ```
 
 ### Step 2: Import into n8n
@@ -138,7 +104,7 @@ wget https://github.com/YOUR_USERNAME/cron-email-to-mom/raw/main/Cron-Email-to-M
 
 ---
 
-## âš™ï¸ Configuration
+## Configuration
 
 ### 1. OpenAI Credentials
 
@@ -223,7 +189,7 @@ Modify Schedule Trigger nodes to change when emails are sent:
 
 ---
 
-## ðŸ’» Usage
+## Usage
 
 ### Activating the Workflow
 
@@ -258,7 +224,7 @@ To send an email immediately:
 
 ---
 
-## ðŸ“‹ Workflow Details
+## Workflow Details
 
 ### Workflow 1: Odisha Regional News (8:02 AM)
 
@@ -299,7 +265,7 @@ To send an email immediately:
 
 ---
 
-## ðŸ”§ Customization Guide
+## Customization Guide
 
 ### Adding New News Categories
 
@@ -334,7 +300,7 @@ Customize email templates in Gmail nodes:
 
 ---
 
-## ðŸ› ï¸ Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -371,7 +337,7 @@ The workflow includes error handling:
 
 ---
 
-## ðŸ“Š Logs and Analytics
+## Logs and Analytics
 
 ### Google Sheets Log Structure
 
@@ -392,7 +358,7 @@ The workflow includes error handling:
 
 ---
 
-## ðŸ”’ Security Best Practices
+## Security Best Practices
 
 ### Credential Management
 - Never commit actual credentials to version control
@@ -414,7 +380,7 @@ The workflow includes error handling:
 
 ---
 
-## ðŸ“ License
+## License
 
 This workflow is provided as-is for personal use. Please respect:
 - OpenAI's usage policies
@@ -424,7 +390,7 @@ This workflow is provided as-is for personal use. Please respect:
 
 ---
 
-## ðŸ¤ Contributing
+## Contributing
 
 Contributions are welcome! To contribute:
 
@@ -444,7 +410,7 @@ Contributions are welcome! To contribute:
 
 ---
 
-## ðŸ“ž Support
+## Support
 
 ### Getting Help
 - **n8n Community**: [community.n8n.io](https://community.n8n.io)
@@ -460,30 +426,12 @@ Please open an issue with:
 
 ---
 
-## ðŸ™ Acknowledgments
+## Acknowledgments
 
 - **n8n** - Workflow automation platform
 - **OpenAI** - GPT-4 language model
 - **Google** - Gmail, Sheets, and Translate APIs
 - **Community** - Inspiration and support
-
----
-
-## ðŸ“ˆ Roadmap
-
-Future enhancements planned:
-- [ ] SMS notifications via Twilio
-- [ ] WhatsApp integration
-- [ ] Voice message generation
-- [ ] Image/infographic generation
-- [ ] RSS feed aggregation
-- [ ] Sentiment analysis
-- [ ] Custom news sources
-- [ ] Multi-recipient support
-- [ ] Dashboard for analytics
-- [ ] Mobile app integration
-
----
 
 <div align="center">
 
