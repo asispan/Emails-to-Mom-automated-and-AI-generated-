@@ -1,17 +1,13 @@
 # Cron Email to Mom
 
-<div align="center">
+**An intelligent n8n workflow that sends personalized daily news digests to your loved ones**
 
 [![n8n](https://img.shields.io/badge/n8n-Workflow-EA4B71?style=for-the-badge&logo=n8n&logoColor=white)](https://n8n.io)
 [![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991?style=for-the-badge&logo=openai&logoColor=white)](https://openai.com)
 [![Gmail](https://img.shields.io/badge/Gmail-Integration-D14836?style=for-the-badge&logo=gmail&logoColor=white)](https://gmail.com)
 [![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)](https://github.com)
 
-**An intelligent n8n workflow that sends personalized daily news digests to your loved ones**
-
 [Features](#features) | [Architecture](#architecture) | [Installation](#installation) | [Configuration](#configuration) | [Usage](#usage)
-
-</div>
 
 ---
 
@@ -61,6 +57,40 @@ Stay connected with family members by automatically sending them:
 
 ## Architecture
 
+### Workflow Components
+
+```
++------------------+
+| Schedule Trigger | (4 different times)
++--------+---------+
+         |
+         v
++------------------+
+|   AI Agent       | (OpenAI GPT-4)
+|  News Curation   |
++--------+---------+
+         |
+         v
++------------------+
+|  Translation     | (Google Translate - for Odia)
++--------+---------+
+         |
+         v
++------------------+
+| Text Processing  | (Paragraph chunking)
++--------+---------+
+         |
+         v
++------------------+
+|  Email Sending   | (Gmail)
++--------+---------+
+         |
+         v
++------------------+
+|   Logging        | (Google Sheets)
++------------------+
+```
+
 ### Key Nodes
 
 | Node Type | Purpose | Configuration |
@@ -98,7 +128,7 @@ wget https://github.com/asispan/Emails-to-Mom-automated-and-AI-generated-/raw/ma
 ### Step 2: Import into n8n
 
 1. Open your n8n instance
-2. Click on **Workflows** â†’ **Import from File**
+2. Click on **Workflows** -> **Import from File**
 3. Select `Cron-Email-to-Mom-Sanitized.json`
 4. The workflow will be imported with placeholder credentials
 
@@ -110,7 +140,7 @@ wget https://github.com/asispan/Emails-to-Mom-automated-and-AI-generated-/raw/ma
 
 Create an OpenAI credential in n8n:
 
-1. Navigate to **Credentials** â†’ **New**
+1. Navigate to **Credentials** -> **New**
 2. Select **OpenAI API**
 3. Add your API key
 4. Name it appropriately (e.g., "OpenAI Account")
@@ -433,10 +463,24 @@ Please open an issue with:
 - **Google** - Gmail, Sheets, and Translate APIs
 - **Community** - Inspiration and support
 
-<div align="center">
+---
 
-**Made with â¤ï¸ for keeping families connected**
+## Roadmap
 
-If you found this workflow helpful, please â­ star the repository!
+Future enhancements planned:
+- [ ] SMS notifications via Twilio
+- [ ] WhatsApp integration
+- [ ] Voice message generation
+- [ ] Image/infographic generation
+- [ ] RSS feed aggregation
+- [ ] Sentiment analysis
+- [ ] Custom news sources
+- [ ] Multi-recipient support
+- [ ] Dashboard for analytics
+- [ ] Mobile app integration
 
-</div>
+---
+
+**Made with dedication for keeping families connected**
+
+If you found this workflow helpful, please star the repository!
