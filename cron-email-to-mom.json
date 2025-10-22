@@ -1,0 +1,1250 @@
+{
+  "name": "Cron Email to Mom",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 12,
+              "triggerAtMinute": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        448
+      ],
+      "id": "0090b99b-b4e0-4170-a524-770ed2d41d00",
+      "name": "12:01 PM",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 16,
+              "triggerAtMinute": 14
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        912
+      ],
+      "id": "6a81b2ec-61ad-4349-bcf1-15608418566c",
+      "name": "4:14 PM",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 20,
+              "triggerAtMinute": 12
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -16,
+        1408
+      ],
+      "id": "d744f44f-c3d3-4961-b6a0-ed1360739c5b",
+      "name": "8:12",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Find the top 5 news from the last 24hrs pertaining to Odisha state. For each news write a headline along with a 2-4 line summary of that news",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "18831644-1790-496b-b3eb-3d06dce446da",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "responseFormat": "text",
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        224
+      ],
+      "id": "9111d051-3692-4dde-93d6-64e565049efa",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "<CREDENTIAL_ID>",
+          "name": "<YOUR_OPENAIAPI_CREDENTIAL>"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f2947ed0-a07e-4f0b-b2ac-7d9d23a6b751",
+              "name": "output.content",
+              "value": "={{ $json.output.content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        576,
+        0
+      ],
+      "id": "4bdb6eec-49e9-4887-8bda-0e243e53ac9a",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "<GOOGLE_SHEETS_URL>",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Issue": "={{ $json.labelIds[0] }}, {{ $json.Issue }}",
+            "Date": "={{ $json.Date }}",
+            "Time": "={{ $json.Time }}",
+            "Subject": "={{ $json.Subject }}",
+            "Email Content": "={{ $json[\"Email Content\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Content",
+              "displayName": "Email Content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Issue",
+              "displayName": "Issue",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1904,
+        704
+      ],
+      "id": "d380a77d-c15d-4bff-8df3-e8d1cba41e87",
+      "name": "Logs",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "<CREDENTIAL_ID>",
+          "name": "<YOUR_GOOGLESHEETSOAUTH2API_CREDENTIAL>"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "<RECIPIENT_EMAIL_ADDRESS>",
+        "subject": "ସୁପ୍ରଭାତ ମାମା, ଓଡ଼ିଶା ବିଷୟରେ କିଛି ଖବର ଯେତେବେଳେ",
+        "emailType": "text",
+        "message": "=ପ୍ରିୟ ମାମା,\nମୁଁ ତୁମ ପାଇଁ ଇଣ୍ଟରନେଟରୁ ଓଡ଼ିଶା ବିଷୟରେ ଏହି ଖବରଗୁଡ଼ିକ ପାଇଛି\n\n{{ $json.news1 }}\n\n{{ $json.news2 }}\n\n{{ $json.news3 }}\n\n{{ $json.news4 }}\n\n{{ $json.news5 }}\n\nଉପରର ଖବରଗୁଡ଼ିକ ବିଷୟରେ ତୁମେ କଣ ଭାବୁଛ ମୋତେ ଲେଖ|\n\nତମର ପ୍ରିୟ ସିସୁ",
+        "options": {
+          "appendAttribution": false,
+          "replyToSenderOnly": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1232,
+        -112
+      ],
+      "id": "09a8d09b-f46f-4402-bdb2-bc5afaa828f4",
+      "name": "Email Sent",
+      "webhookId": "<WEBHOOK_ID>",
+      "alwaysOutputData": true,
+      "notesInFlow": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "<CREDENTIAL_ID>",
+          "name": "<YOUR_GMAILOAUTH2_CREDENTIAL>"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.output.content }}",
+        "translateTo": "or"
+      },
+      "type": "n8n-nodes-base.googleTranslate",
+      "typeVersion": 2,
+      "position": [
+        800,
+        0
+      ],
+      "id": "e538cb2d-6a45-419a-8efc-8f8c152f0fc0",
+      "name": "English to Odia Translation",
+      "credentials": {
+        "googleTranslateOAuth2Api": {
+          "id": "<CREDENTIAL_ID>",
+          "name": "<YOUR_GOOGLETRANSLATEOAUTH2API_CREDENTIAL>"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "70beab5e-8048-4850-98bd-ad707fcb4f6e",
+              "name": "Date",
+              "value": "={{new Date().toLocaleDateString('en-IN')}}\n",
+              "type": "string"
+            },
+            {
+              "id": "80a6376f-3ff9-4c00-9641-4aff67efcd5a",
+              "name": "Time",
+              "value": "={{new Date().toLocaleTimeString('en-IN')}}",
+              "type": "string"
+            },
+            {
+              "id": "56ef92fa-3dab-4c9c-abce-f7b5bc9d5786",
+              "name": "Subject",
+              "value": "ସୁପ୍ରଭାତ ମାମା, ଓଡ଼ିଶା ବିଷୟରେ କିଛି ଖବର ଯେତେବେଳେ",
+              "type": "string"
+            },
+            {
+              "id": "2d947360-47d1-4375-be11-5ce2a1876acf",
+              "name": "Email Content",
+              "value": "=ପ୍ରିୟ ମାମା,\nମୁଁ ତୁମ ପାଇଁ ଇଣ୍ଟରନେଟରୁ ଓଡ଼ିଶା ବିଷୟରେ ଏହି ଖବରଗୁଡ଼ିକ ପାଇଛି\n\n{{ $json.news1 }}\n\n{{ $json.news2 }}\n\n{{ $json.news3 }}\n\n{{ $json.news4 }}\n\n{{ $json.news5 }}\n\nଉପରର ଖବରଗୁଡ଼ିକ ବିଷୟରେ ତୁମେ କଣ ଭାବୁଛ ମୋତେ ଲେଖ|\n\nତମର ପ୍ରିୟ ସିସୁ",
+              "type": "string"
+            },
+            {
+              "id": "c1bcc0b5-5936-4390-9dc6-c61b23ffbc0c",
+              "name": "Issue",
+              "value": "={{ $json.labelIds[0] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1536,
+        0
+      ],
+      "id": "9de3d2eb-9eee-43d3-a059-9ca5604a1cc7",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "responseFormat": "text",
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        672
+      ],
+      "id": "59518ffb-ae0f-4db9-9d5a-ab7ed315fd48",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "<CREDENTIAL_ID>",
+          "name": "<YOUR_OPENAIAPI_CREDENTIAL>"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n    \"count\": \"1\",\n\t\"headline\": \"Bhubaneswar becomes a Smart City\",\n\t\"content\": \"As the city made live 5 new smart city projects the city has become the latest entrant into the Smart City qualification. The 5 new projects are automated traffic light, AI driven meteorology, Public PA, App based governance information delivery and RSS feed based public works update.\"\n  ,\n  \"count\": \"2\",\n\t\"headline\": \"Jharsuguda gets a new international airport\",\n\t\"content\": \"Jharsuguda has marked a major milestone with the inauguration of its new international airport. The facility is expected to boost regional connectivity and open global trade opportunities for western Odisha. Equipped with modern infrastructure, the airport can handle both domestic and international flights. Local residents hope it will accelerate tourism, business, and economic growth across the region.\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        368,
+        224
+      ],
+      "id": "9e918c89-f384-459c-b957-2cfc30d16e37",
+      "name": "Structured Output Parser 1"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n    \"count\": \"1\",\n\t\"headline\": \"Bhubaneswar becomes a Smart City\",\n\t\"content\": \"As the city made live 5 new smart city projects the city has become the latest entrant into the Smart City qualification. The 5 new projects are automated traffic light, AI driven meteorology, Public PA, App based governance information delivery and RSS feed based public works update.\"\n  ,\n  \"count\": \"2\",\n\t\"headline\": \"Jharsuguda gets a new international airport\",\n\t\"content\": \"Jharsuguda has marked a major milestone with the inauguration of its new international airport. The facility is expected to boost regional connectivity and open global trade opportunities for western Odisha. Equipped with modern infrastructure, the airport can handle both domestic and international flights. Local residents hope it will accelerate tourism, business, and economic growth across the region.\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        400,
+        672
+      ],
+      "id": "e737e36e-8b2c-48bc-85cf-8f2cc79d83bd",
+      "name": "Structured Output Parser 2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Find the top 5 national news from the last 24hrs pertaining to India. For each news write a headline along with a 2-4 line summary of that news",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        448
+      ],
+      "id": "bb6af814-e4ad-49ed-8e6c-7cd4b3d18024",
+      "name": "AI Agent 2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f2947ed0-a07e-4f0b-b2ac-7d9d23a6b751",
+              "name": "output.content",
+              "value": "={{ $json.output.content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        448
+      ],
+      "id": "2c0d2e47-306d-4d7b-92b8-b9cb68abf9d9",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = items[0].json.output.content;\n\n// Split based on the numbered pattern, e.g., 1., 2., 3., etc.\nconst paragraphs = text.split(/(?=\\d+\\.\\s)/g).filter(p => p.trim() !== '');\n\n// Build an output object with each news item keyed by its number\nconst output = {};\nparagraphs.forEach((p, idx) => {\n  output[`${idx + 1}`] = p.trim();\n});\n\nreturn [{ json: output }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        784,
+        448
+      ],
+      "id": "fe68cef6-13f8-4100-872e-fedbf965a2aa",
+      "name": "Chunk to Paragraph 2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = items[0].json.translatedText;\nconst paragraphs = text.split(/(?=୧\\.|୨\\.|୩\\.|୪\\.|୫\\.)/g).filter(p => p.trim() !== '');\n\nconst output = {};\nparagraphs.forEach((p, idx) => {\n  output[`news${idx + 1}`] = p.trim();\n});\n\nreturn [{ json: output }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1024,
+        0
+      ],
+      "id": "4d0134b5-ca38-487c-944f-7779d88c61be",
+      "name": "Chunk to Paragraph 1"
+    },
+    {
+      "parameters": {
+        "sendTo": "<RECIPIENT_EMAIL_ADDRESS>",
+        "subject": "Mama, here are some selected National news",
+        "emailType": "text",
+        "message": "=Dear mom,\nI have got selected national news\n\n{{ $json[\"1\"] }}\n\n{{ $json[\"2\"] }}\n\n{{ $json[\"3\"] }}\n\n{{ $json[\"4\"] }}\n\n{{ $json[\"5\"] }}\n\nWhat do you think about the news above? Tell me by replying to this email\n",
+        "options": {
+          "appendAttribution": false,
+          "replyToSenderOnly": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1120,
+        336
+      ],
+      "id": "1ecb7d00-1a14-4249-9ebc-45db8e704de3",
+      "name": "Email Sent1",
+      "webhookId": "<WEBHOOK_ID>",
+      "alwaysOutputData": true,
+      "notesInFlow": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "<CREDENTIAL_ID>",
+          "name": "<YOUR_GMAILOAUTH2_CREDENTIAL>"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "70beab5e-8048-4850-98bd-ad707fcb4f6e",
+              "name": "Date",
+              "value": "={{new Date().toLocaleDateString('en-IN')}}\n",
+              "type": "string"
+            },
+            {
+              "id": "80a6376f-3ff9-4c00-9641-4aff67efcd5a",
+              "name": "Time",
+              "value": "={{new Date().toLocaleTimeString('en-IN')}}",
+              "type": "string"
+            },
+            {
+              "id": "56ef92fa-3dab-4c9c-abce-f7b5bc9d5786",
+              "name": "Subject",
+              "value": "Mama here are some selected National news",
+              "type": "string"
+            },
+            {
+              "id": "2d947360-47d1-4375-be11-5ce2a1876acf",
+              "name": "Email Content",
+              "value": "=Dear mom,\nI have got selected national news\n\n{{ $json[\"1\"] }}\n\n{{ $json[\"2\"] }}\n\n{{ $json[\"3\"] }}\n\n{{ $json[\"4\"] }}\n\n{{ $json[\"5\"] }}\n\nWhat do you think about the news above? Tell me by replying to this email\n",
+              "type": "string"
+            },
+            {
+              "id": "c1bcc0b5-5936-4390-9dc6-c61b23ffbc0c",
+              "name": "Issue",
+              "value": "={{ $json.labelIds[0] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1424,
+        448
+      ],
+      "id": "16af5987-6c71-456a-a557-d6e5d9b444a0",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "responseFormat": "text",
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        1136
+      ],
+      "id": "c938339e-10f1-418c-98ea-023a64dfb1c3",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "<CREDENTIAL_ID>",
+          "name": "<YOUR_OPENAIAPI_CREDENTIAL>"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n    \"count\": \"1\",\n\t\"headline\": \"Bhubaneswar becomes a Smart City\",\n\t\"content\": \"As the city made live 5 new smart city projects the city has become the latest entrant into the Smart City qualification. The 5 new projects are automated traffic light, AI driven meteorology, Public PA, App based governance information delivery and RSS feed based public works update.\"\n  ,\n  \"count\": \"2\",\n\t\"headline\": \"Jharsuguda gets a new international airport\",\n\t\"content\": \"Jharsuguda has marked a major milestone with the inauguration of its new international airport. The facility is expected to boost regional connectivity and open global trade opportunities for western Odisha. Equipped with modern infrastructure, the airport can handle both domestic and international flights. Local residents hope it will accelerate tourism, business, and economic growth across the region.\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        416,
+        1136
+      ],
+      "id": "68b292c1-0dff-4c98-b35d-885fed70f8bd",
+      "name": "Structured Output Parser "
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f2947ed0-a07e-4f0b-b2ac-7d9d23a6b751",
+              "name": "output.content",
+              "value": "={{ $json.output.content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        576,
+        912
+      ],
+      "id": "e81738dc-8635-42cf-bd72-ebcb4548a6d5",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = items[0].json.output.content;\n\n// Split based on the numbered pattern, e.g., 1., 2., 3., etc.\nconst paragraphs = text.split(/(?=\\d+\\.\\s)/g).filter(p => p.trim() !== '');\n\n// Build an output object with each news item keyed by its number\nconst output = {};\nparagraphs.forEach((p, idx) => {\n  output[`${idx + 1}`] = p.trim();\n});\n\nreturn [{ json: output }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        800,
+        912
+      ],
+      "id": "bcf97ea7-8715-45f5-9859-3710df69cd97",
+      "name": "Chunk to Paragraph "
+    },
+    {
+      "parameters": {
+        "sendTo": "<RECIPIENT_EMAIL_ADDRESS>",
+        "subject": "Mama, here are some selected National news",
+        "emailType": "text",
+        "message": "=Dear mom,\nI have got selected national news\n\n{{ $json[\"1\"] }}\n\n{{ $json[\"2\"] }}\n\n{{ $json[\"3\"] }}\n\n{{ $json[\"4\"] }}\n\n{{ $json[\"5\"] }}\n\nWhat do you think about the news above? Tell me by replying to this email\n",
+        "options": {
+          "appendAttribution": false,
+          "replyToSenderOnly": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1136,
+        800
+      ],
+      "id": "bb86df1a-1fe2-4c5a-82c7-3584cdfa2c91",
+      "name": "Email Sent2",
+      "webhookId": "<WEBHOOK_ID>",
+      "alwaysOutputData": true,
+      "notesInFlow": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "<CREDENTIAL_ID>",
+          "name": "<YOUR_GMAILOAUTH2_CREDENTIAL>"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "70beab5e-8048-4850-98bd-ad707fcb4f6e",
+              "name": "Date",
+              "value": "={{new Date().toLocaleDateString('en-IN')}}\n",
+              "type": "string"
+            },
+            {
+              "id": "80a6376f-3ff9-4c00-9641-4aff67efcd5a",
+              "name": "Time",
+              "value": "={{new Date().toLocaleTimeString('en-IN')}}",
+              "type": "string"
+            },
+            {
+              "id": "56ef92fa-3dab-4c9c-abce-f7b5bc9d5786",
+              "name": "Subject",
+              "value": "Mama here are some selected National news",
+              "type": "string"
+            },
+            {
+              "id": "2d947360-47d1-4375-be11-5ce2a1876acf",
+              "name": "Email Content",
+              "value": "=Dear mom,\nI have got selected national news\n\n{{ $json[\"1\"] }}\n\n{{ $json[\"2\"] }}\n\n{{ $json[\"3\"] }}\n\n{{ $json[\"4\"] }}\n\n{{ $json[\"5\"] }}\n\nWhat do you think about the news above? Tell me by replying to this email\n",
+              "type": "string"
+            },
+            {
+              "id": "c1bcc0b5-5936-4390-9dc6-c61b23ffbc0c",
+              "name": "Issue",
+              "value": "={{ $json.labelIds[0] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1440,
+        912
+      ],
+      "id": "78dfd9bb-567b-4ce9-832c-9d334d3c5b0b",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {
+          "responseFormat": "text",
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        192,
+        1632
+      ],
+      "id": "8d329677-0126-4aa9-8a5d-28ea5d42937f",
+      "name": "OpenAI Chat Model3",
+      "credentials": {
+        "openAiApi": {
+          "id": "<CREDENTIAL_ID>",
+          "name": "<YOUR_OPENAIAPI_CREDENTIAL>"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "[\n  {\n    \"count\": \"1\",\n    \"headline\": \"This Day That Year\",\n    \"content\": \"October 5 is observed as World Teachers’ Day to commemorate the 1966 ILO/UNESCO Recommendation on the Status of Teachers.\\nOn October 5, 2011, Apple co-founder Steve Jobs passed away, marking a pivotal moment in tech history.\"\n  },\n  {\n    \"count\": \"2\",\n    \"headline\": \"Fun Fact\",\n    \"content\": \"Bananas are botanically true berries because they develop from a single ovary.\\nStrawberries are not berries; they are aggregate accessory fruits formed from multiple ovaries of a single flower.\"\n  },\n  {\n    \"count\": \"3\",\n    \"headline\": \"General Knowledge\",\n    \"content\": \"The Constitution of India is the world’s longest written constitution for a sovereign nation.\\nIt was adopted in 1950 and has expanded through many amendments to hundreds of detailed articles and schedules.\"\n  },\n  {\n    \"count\": \"4\",\n    \"headline\": \"Did You Know\",\n    \"content\": \"Octopuses have three hearts—two pump blood to the gills and one circulates oxygenated blood to the body.\\nTheir blood is blue because it uses hemocyanin, a copper-based molecule, instead of iron-based hemoglobin.\"\n  },\n  {\n    \"count\": \"5\",\n    \"headline\": \"Latest in Science\",\n    \"content\": \"The 2025 Nobel Prize announcements begin in early October, with Physiology or Medicine and Physics leading the week.\\nThis year also saw the first personalized CRISPR gene-editing therapy administered to a baby for a rare metabolic disorder.\"\n  }\n]"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        400,
+        1632
+      ],
+      "id": "bcac3b11-1573-4fbd-a7a7-67be26ec4e55",
+      "name": "Structured Output Parser 3"
+    },
+    {
+      "parameters": {
+        "sendTo": "<RECIPIENT_EMAIL_ADDRESS>",
+        "subject": "What a day, here is something INTERESTING",
+        "emailType": "text",
+        "message": "=Dear mom,<br>\nI have got some interesting fun facts<br><br>\n\n<h2>{{ $json.output[0].headline }}</h2>\n<b>{{ $json.output[0].content }}</b><br><br>\n\n<h2>{{ $json.output[1].headline }}</h2>\n<b>{{ $json.output[1].content }}</b><br><br>\n\n<h2>{{ $json.output[2].headline }}</h2>\n<b>{{ $json.output[2].content }}</b><br><br>\n\n<h2>{{ $json.output[3].headline }}</h2>\n<b>{{ $json.output[3].content }}</b><br><br>\n\n<h2>{{ $json.output[4].headline }}</h2>\n<b>{{ $json.output[4].content }}</b><br><br>\n\nDid you enjoy reading today's fun facts? Tell me by replying to this email\n",
+        "options": {
+          "appendAttribution": false,
+          "replyToSenderOnly": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        832,
+        1296
+      ],
+      "id": "7086027c-6db2-4b09-a8fb-87356ba92ab4",
+      "name": "Email Sent3",
+      "webhookId": "<WEBHOOK_ID>",
+      "alwaysOutputData": true,
+      "notesInFlow": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "<CREDENTIAL_ID>",
+          "name": "<YOUR_GMAILOAUTH2_CREDENTIAL>"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "70beab5e-8048-4850-98bd-ad707fcb4f6e",
+              "name": "Date",
+              "value": "={{new Date().toLocaleDateString('en-IN')}}\n",
+              "type": "string"
+            },
+            {
+              "id": "80a6376f-3ff9-4c00-9641-4aff67efcd5a",
+              "name": "Time",
+              "value": "={{new Date().toLocaleTimeString('en-IN')}}",
+              "type": "string"
+            },
+            {
+              "id": "56ef92fa-3dab-4c9c-abce-f7b5bc9d5786",
+              "name": "Subject",
+              "value": "What a day, here is something INTERESTING",
+              "type": "string"
+            },
+            {
+              "id": "2d947360-47d1-4375-be11-5ce2a1876acf",
+              "name": "Email Content",
+              "value": "=Dear mom,<br>\nI have got some interesting fun facts<br><br>\n\n<h2> {{ $json.output[0].headline }} </h2>\n<b>{{ $json.output[0].content }}</b><br><br>\n\n<h2>{{ $json.output[1].headline }}</h2>\n<b>{{ $json.output[1].content }}</b><br><br>\n\n<h2>{{ $json.output[2].headline }}</h2>\n<b>{{ $json.output[2].content }}</b><br><br>\n\n<h2>{{ $json.output[3].headline }}</h2>\n<b>{{ $json.output[3].content }}</b><br><br>\n\n<h2>{{ $json.output[4].headline }}</h2>\n<b>{{ $json.output[4].content }}</b><br><br>\n\nDid you enjoy reading today's fun facts? Tell me by replying to this email\n",
+              "type": "string"
+            },
+            {
+              "id": "c1bcc0b5-5936-4390-9dc6-c61b23ffbc0c",
+              "name": "Issue",
+              "value": "={{ $json.labelIds[0] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1424,
+        1408
+      ],
+      "id": "46b206c8-d476-49a0-95c8-275a7e73afc7",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert fact generator. Output ONLY a valid JSON array containing exactly 5 objects, no additional text or explanations. Each object must have three keys: \"count\" (a string from \"1\" to \"5\"), \"headline\" (exactly one of these phrases: \"This Day That Year\", \"Fun Fact\", \"General Knowledge\", \"Did You Know\", or \"Latest in Science\" – assign one unique headline per object in that order), and \"content\" (a string of 2-4 factual lines separated by \\n, based on true, up-to-date information relevant to October 5, 2025 where possible; keep each line concise and informative). Append a url link to read more about the content at the end of the content\n\nEnsure the JSON is parseable, uses double quotes, and has no trailing commas or errors. Base content on verified knowledge: for \"This Day That Year\" include events like World Teachers' Day or Steve Jobs' passing; \"Fun Fact\" on botanical trivia like bananas vs. strawberries; \"General Knowledge\" on India's Constitution; \"Did You Know\" on octopus biology; \"Latest in Science\" on 2025 Nobel Prizes or CRISPR advances.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        1408
+      ],
+      "id": "9c8f9209-244d-4f2f-b119-b9a6d47229c8",
+      "name": "AI Agent 4"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Find the top 5 international news of significance from the last 24hrs (exclude India strictly). For each news write a headline along with a 2-4 line summary of that news",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        912
+      ],
+      "id": "5bb1ef72-a6a8-4989-99c6-4f1b5442aef1",
+      "name": "AI Agent 3"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8,
+              "triggerAtMinute": 2
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b28465b6-ead5-4cd4-a58d-108576d1a3ab",
+      "name": "8.02 AM",
+      "executeOnce": true
+    }
+  ],
+  "connections": {
+    "8:12": {
+      "main": [
+        [
+          {
+            "node": "AI Agent 4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "English to Odia Translation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Sent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "English to Odia Translation": {
+      "main": [
+        [
+          {
+            "node": "Chunk to Paragraph 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Logs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent 2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser 1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser 2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent 2",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "12:01 PM": {
+      "main": [
+        [
+          {
+            "node": "AI Agent 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent 2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Chunk to Paragraph 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chunk to Paragraph 1": {
+      "main": [
+        [
+          {
+            "node": "Email Sent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Sent1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chunk to Paragraph 2": {
+      "main": [
+        [
+          {
+            "node": "Email Sent1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Logs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent 3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser ": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent 3",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Chunk to Paragraph ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chunk to Paragraph ": {
+      "main": [
+        [
+          {
+            "node": "Email Sent2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Sent2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4:14 PM": {
+      "main": [
+        [
+          {
+            "node": "AI Agent 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Logs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent 4",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser 3": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent 4",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Sent3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent 4": {
+      "main": [
+        [
+          {
+            "node": "Email Sent3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent 3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Logs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8.02 AM": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "m4nOmq18tuiageov"
+  },
+  "versionId": "5c54cd06-f595-443b-aa0e-420f11af60c3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "<N8N_INSTANCE_ID>"
+  },
+  "id": "ZeZNHFhoGRA4AB2m",
+  "tags": []
+}
