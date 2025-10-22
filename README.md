@@ -9,9 +9,9 @@
 
 [Features](#features) | [Architecture](#architecture) | [Installation](#installation) | [Configuration](#configuration) | [Usage](#usage)
 
-<p align="center">
+<p align="left">
   <br>
-  <img src="https://github.com/asispan/Emails-to-Mom-automated-and-AI-generated-/blob/main/Screenshot-2025-10-22-at-4.56.14-PM.jpeg" alt="n8n Workflow Visualization" width="100%">
+  <img src="https://github.com/asispan/Emails-to-Mom-automated-and-AI-generated-/blob/main/workflow-example.png" alt="n8n Workflow Visualization" width="100%">
   <br>
   <br>
 </p>
