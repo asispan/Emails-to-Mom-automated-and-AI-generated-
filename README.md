@@ -9,7 +9,7 @@
 
 **An intelligent n8n workflow that sends personalized daily news digests to your loved ones**
 
-[Features](#features) â€¢ [Architecture](#architecture) â€¢ [Installation](#installation) â€¢ [Configuration](#configuration) â€¢ [Usage](#usage)
+[Features](#features) | [Architecture](#architecture) | [Installation](#installation) | [Configuration](#configuration) | [Usage](#usage)
 
 </div>
 
